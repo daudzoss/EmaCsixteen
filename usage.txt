@@ -1,0 +1,94 @@
+EmaC=s is a small (~1.5KB) alternative to the built-in Commodore text editor.
+
+The pair of well-placed Control keys (abbreviated "C-" below) on Commodore's
+underappreciated Plus/4 always cried out to me for an editor application that
+could make use of them, especially since dual C-keys didn't make it onto the
+IBM model "M" keyboards until later in 1984, and even then they were placed
+too low for comfortable frequent use in an editor such as Emacs.
+
+Here is a machine-language set of Emacs-style key bindings that I use myself
+in preference to the built-in editor.  It can repeat most keyboard actions a
+set number of times, cut and yank back entire 40-character lines or portions
+thereof, and indicates the X,Y cursor position as well as insertion mode
+unambiguously at all times (verbally and with distinct cursor colors).
+
+Upon invocation, the RETURN key reverts to a carriage return (same as SHIFT+
+RETURN) in order to edit a screen of data quickly.  Areas of the screen may
+be split, to preserve regions being copied for instance and prevent them from
+being scrolled.  Upon exit, the indicator bar disappears and the split areas
+are re-merged at which point the Commodore OS bindings are reactivated and
+the RETURN key may be used to enter lines into BASIC, or the machine language
+MONITOR.
+
+A Makefile is provided to build from the included source with the xa65 cross-
+assembler.  The sole option thus far is whether the INSerT key should behave
+as in the Commodore (each press of SHIFT+DELETE inserts a space character,
+most useful in OVeRwrite mode) or as in Emacs (mode toggle between OVeRwrite
+and INSerT modes).  The Makefile is set for Emacs-style since the equivalent
+ESC-X O is a bit long, but this can be easily reverted to Commodore mode.
+
+The executable is called emac=s.prg, and may either be copied to a Commodore-
+formatted diskette (or .D64 diskette image in an emulator) or stored on a
+cassette tape as with this same name.  The command to load it into memory is:
+
+     LOAD"EMAC=S",8,1				(from disk)
+     LOAD"EMAC=S",1,1				(from cassette tape)
+
+If Autostarted in VICE it will be run automatically; otherwise it is necessary
+to type:
+
+   RUN
+
+The executable code advances the bottom-of-BASIC TXTTAB pointer to roughly
+address $1600, 1.5KB above the screen memory.  The code to do this update
+actually resides below the BASIC SYS call stub, in the last 24 bytes of the
+screen starting at $0fe8 which are not normally used.  (Thus the address in
+the first two bytes of the .PRG file are $e8 and $0f, and so it is important
+to include the ,1 flag at the end so that the code doesn't get relocated.)
+Thus total system memory remaining for BASIC is roughly 58KB on a Plus/4 and
+10.5KB on a C16 (0.5KB if high-resolution GRAPHICs are active).
+
+After printing a summary of usage and GPL licence, the considerable ~0.5KB RAM
+required for storing that message has already been freed.  The "READY." prompt
+(if invoked from BASIC rather than the MONITOR) is displayed and the top line
+of the screen displays instructions for resuming the EmaC=s editor.  The
+usable screen is thus 24 lines rather than 25, with the tradeoff that entering
+EmaC=s mode can always be accomplished by pressing the home key twice:
+
+       HOME HOME RETURN
+
+Leaving EmaC=s and returning to BASIC or MONITOR mode (where typed commands/
+lines can actually be interpreted by the OS) is accomplished by pressing C-z
+or the Escape key twice:
+
+       ESC ESC
+
+If Emacs is exited completely with C-x C-c, the full memory is returned to the
+system.  If you type this accidentally, it may be possible to re-RUN the BASIC
+stub to re-launch the Editor.
+
+It uses the windowing capabilities of BASIC 3.5 machines, but presents Emacs'
+improved interface for splitting the screen as compared with cursoring over to
+a new location and pressing ESC-T or ESC-B.  Furthermore it is deemed that
+windows narrower than 40 characters are not useful, so the screen is only ever
+split into at most two horizontal regions between 1 and 24 rows high, totaling
+24 rows plus an indicator bar that displays cursor position and insert versus
+overwrite mode as well as any prefix keys (ESC-, C-X or C-number) that are
+active.  The ESC-T and ESC-B sequences still work, but they constrict only the
+vertical extent of the active window (not narrowing it in width) and give the
+space over to the inactive window.
+
+In fact most of the Commodore ESC-prefixed bindings still work, so that a new
+line may be opened with either C-o or ESC-I, the cursor moved to the leftmost
+column with either C-a or ESC-J, etc.  Note however that since native mode has
+no support for cut/copy/paste, C-k and ESC-q will both obliterate the rest of
+a line but only the former will stash the contents away ina kill buffer.
+
+Because the equal sign '=' meant to represent the Commodore logo is not an
+allowed character in a project name, the github repo is named "EmaCsixteen", 
+as in "Emacs C-16".  Full C-code exists in the comments in the right margin
+of the 6502 assembler source in main.asm to make it easier for you to read
+and modify.  Enjoy!
+
+Daud A. Zoss
+November 9, 2015

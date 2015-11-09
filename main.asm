@@ -1096,7 +1096,7 @@ INSTRUC	.byte	13
 	.byte	"ESC-X O TOGGLES INS","ERT CURSOR, MOVE WITH",13
 	.byte	"C-A C-B C-E C-F C-N C-P C-T ESC-< ESC-> ",13
 	.byte	"                                        ",13
-	.byte	"C-X THEN 1,2,+ OR - TO SET WINDOW SIZES ",13
+	.byte	"C-X THEN 1,2,O,+OR- TO SET WINDOWS/SIZES",13
 	.byte	"C-0 THROUGH C-9 REPEATS A SUBSEQUENT KEY",13
 	.byte	"                                        ",13
 	.byte	"C-D DELETE CHAR, C-O INSERTS BLANK LINES",13
