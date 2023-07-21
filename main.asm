@@ -14,7 +14,7 @@
 ;;; You should have received a copy of the GNU General Public License
 ;;; along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ;;; 
-;;; Contact zoss@hp.com or 16399 W Bernardo Dr San Diego CA 92127 USA
+;;; Contact daudzoss@hp.com
 	
 ;;; build syntax with xa65
 ;;; 
@@ -722,10 +722,10 @@ ctrl_y	jsr	findcsr		;char ctrl_y(char a) {
 	sta	K		; K = YANKLEN & 0x7f;
 	jsr	ACmin1		; for (AC = AC ? AC : 1; AC > 0; AC--) {
 ctrl_y0	bit	YANKLEN		;
-	bpl	ctrl_y1		;  if (YANKLEN & 0x80)
+	bpl	ctrl_y8		;  if (YANKLEN & 0x80)
 	lda	#64+9		;
 	jsr	printE_		;   printE_('I'); // insert a line
-	ldy	#0		;
+ctrl_y8	ldy	#0		;
 ctrl_y1 lda	PNTR		;  for (y = 0; y < K; y++) { 
 	cmp	SCRT		;
 	lda	#BLANK		;
